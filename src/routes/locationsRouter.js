@@ -1,40 +1,35 @@
 import { Router } from "express";
 import { celebrate } from "celebrate";
-import { locations } from "../controllers/index";
+import { locations } from "../controllers/index.js";
 import { authenticate } from "../middleware/authenticate.js";
 import {
-  createLocationSchema,
-  getAllLocationsSchema,
-  locationIdSchema,
-  updateLocationSchema,
-} from "../validations/locationsValidation.js";
+  createLocation,
+  getAllLocations,
+  getLocationById,
+  updateLocation,
+} from "../controllers/locations/locationController.js";
 
 const locationsRouter = Router();
 
-router.get(
-  "/api/locations",
-  celebrate(getAllLocationsSchema),
-  locations.getAllLocations,
-);
+router.get("/api/locations", celebrate(getAllLocationsSchema), getAllLocations);
 
 router.get(
   "/api/locations/:locationId",
   celebrate(locationIdSchema),
-  locations.getLocationById,
+  getLocationById,
 );
 
 router.post(
   "/api/locations",
   authenticate,
-  uploadLocationImage.single("images"),
   celebrate(createLocationSchema),
-  locations.createLocation,
+  createLocation,
 );
 router.patch(
   "/api/locations/:locationId",
   authenticate,
   celebrate(updateLocationSchema),
-  locations.updateLocation,
+  updateLocation,
 );
 
 export default locationsRouter;
