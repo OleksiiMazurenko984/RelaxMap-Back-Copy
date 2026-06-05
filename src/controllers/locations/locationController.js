@@ -1,6 +1,6 @@
 import createHttpError from "http-errors";
-import { Location } from "../models/location.js";
-import { saveLocationImageToCloudinary } from "../utils/saveFileToCloudinary.js";
+import { Location } from "../../models/location.js";
+import { saveLocationImageToCloudinary } from "../../utils/saveFileToCloudinary.js";
 
 export const getLocations = async (req, res) => {
   const { page = 1, limit = 10, region, type, search } = req.query;
