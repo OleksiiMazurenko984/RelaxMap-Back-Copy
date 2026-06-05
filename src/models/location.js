@@ -28,7 +28,7 @@ const locationShema = new Schema(
       maxlength: 6000,
       trim: true,
     },
-    images: {
+    image: {
       type: String,
       required: true,
     },
