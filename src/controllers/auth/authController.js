@@ -2,6 +2,7 @@ import bcrypt from 'bcrypt';
 import createHttpError from 'http-errors';
 import { User } from '../../models/user.js';
 import { createSession, setSessionCookies, removeSession } from '../../services/auth/authService.js';
+import {Session} from "../../models/session.js";
 
 export const registerUser = async (req, res, next) => {
     try {
@@ -44,7 +45,7 @@ export const loginUser = async (req, res, next) => {
         setSessionCookies(res, session);
 
         res.status(200).json({
-            user: { id: user._id, email: user.email }
+            user: { id: user._id, name: user.name, email: user.email }
         });
     } catch (error) {
         next(error);
@@ -54,10 +55,26 @@ export const loginUser = async (req, res, next) => {
 
 export const refreshUserSession = async (req, res, next) => {
     try {
+        const { refreshToken, sessionId } = req.cookies;
 
-        const { sessionId } = req.cookies;
+        if (!refreshToken || !sessionId) {
+            return next(createHttpError(401, 'Refresh token or Session ID missing'));
+        }
 
-        const newSession = await createSession(req.user._id, sessionId);
+        const session = await Session.findById(sessionId);
+        if (!session || session.refreshToken !== refreshToken) {
+            return next(createHttpError(401, 'Session not found or invalid refresh token'));
+        }
+
+        if (new Date() > new Date(session.refreshTokenValidUntil)) {
+            await Session.deleteOne({ _id: sessionId });
+            res.clearCookie('sessionId');
+            res.clearCookie('accessToken');
+            res.clearCookie('refreshToken');
+            return next(createHttpError(401, 'Refresh token expired. Please login again.'));
+        }
+
+        const newSession = await createSession(session.userId, sessionId);
         setSessionCookies(res, newSession);
 
         res.status(200).json({ message: 'Session refreshed successfully' });
