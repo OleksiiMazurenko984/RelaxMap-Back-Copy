@@ -5,7 +5,7 @@ import { createSession, setSessionCookies, removeSession } from '../../services/
 
 export const registerUser = async (req, res, next) => {
     try {
-        const { email, password } = req.body;
+        const { name, email, password } = req.body;
 
         const existingUser = await User.findOne({ email });
         if (existingUser) {
@@ -13,13 +13,13 @@ export const registerUser = async (req, res, next) => {
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);
-        const user = await User.create({ email, password: hashedPassword });
+        const user = await User.create({ name, email, password: hashedPassword });
 
         const session = await createSession(user._id);
         setSessionCookies(res, session);
 
         res.status(201).json({
-            user: { id: user._id, email: user.email }
+            user: { id: user._id, name: user.name , email: user.email }
         });
     } catch (error) {
         next(error);
