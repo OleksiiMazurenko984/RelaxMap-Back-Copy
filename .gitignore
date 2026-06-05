@@ -144,3 +144,6 @@ vite.config.ts.timestamp-*
 
 # Bruno collections
 bruno/
+
+# Idea files
+.idea/
