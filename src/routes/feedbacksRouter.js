@@ -1,5 +1,20 @@
 import { Router } from "express";
+import { celebrate } from "celebrate";
+import {
+  createFeedback,
+  getFeedbacks,
+} from "../controllers/feedbacks/feedbackController.js";
 
-const feedbacksRouter = Router();
+import {
+  createFeedbackSchema,
+  getFeedbacksSchema,
+} from "../validations/feedbackValidation.js";
 
-export default feedbacksRouter;
+import { authenticate } from "../middleware/authenticate.js";
+
+const router = Router();
+
+router.get("/", celebrate(getFeedbacksSchema), getFeedbacks);
+router.post("/", authenticate, celebrate(createFeedbackSchema), createFeedback);
+
+export default router;
