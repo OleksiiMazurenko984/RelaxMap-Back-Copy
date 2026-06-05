@@ -4,7 +4,7 @@ export const registerUserSchema = {
     [Segments.BODY]: Joi.object({
         name: Joi.string().min(2).max(32).required().messages({
             'string.min': 'Name must be at least 2 characters long',
-            'string.max': 'Name must be at most 50 characters long',
+            'string.max': 'Name must be at most 32 characters long',
             'any.required': 'Name is required',
         }),
         email: Joi.string().email().required().messages({
