@@ -1,5 +1,50 @@
 import { Schema, model } from "mongoose";
 
-const locationShema = new Schema({});
+const locationShema = new Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+      minlength: 3,
+      maxlength: 96,
+      trim: true,
+    },
+    type: {
+      type: String,
+      required: true,
+      maxlength: 64,
+      trim: true,
+    },
+    region: {
+      type: String,
+      required: true,
+      maxlength: 64,
+      trim: true,
+    },
+    description: {
+      type: String,
+      required: true,
+      minlength: 20,
+      maxlength: 6000,
+      trim: true,
+    },
+    images: {
+      type: String,
+      required: true,
+    },
+    userId: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+  },
+  {
+    timestamps: true,
+  },
+);
+
+locationSchema.index({ region: 1, type: 1 });
+locationSchema.index({ name: "text" });
+locationSchema.index({ userId: 1 });
 
 export const LocationModel = model("Location", locationShema);
