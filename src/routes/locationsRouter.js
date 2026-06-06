@@ -3,33 +3,37 @@ import { celebrate } from "celebrate";
 import { locations } from "../controllers/index.js";
 import { authenticate } from "../middleware/authenticate.js";
 import {
-  createLocation,
-  getAllLocations,
-  getLocationById,
-  updateLocation,
-} from "../controllers/locations/locationController.js";
+  createLocationSchema,
+  getAllLocationsSchema,
+  locationIdSchema,
+  updateLocationSchema,
+} from "../validations/locationValidation.js";
 
 const locationsRouter = Router();
 
-router.get("/api/locations", celebrate(getAllLocationsSchema), getAllLocations);
-
-router.get(
-  "/api/locations/:locationId",
-  celebrate(locationIdSchema),
-  getLocationById,
+locationsRouter.get(
+  "/locations",
+  celebrate(getAllLocationsSchema),
+  locations.getLocations,
 );
 
-router.post(
-  "/api/locations",
+locationsRouter.get(
+  "/locations/:locationId",
+  celebrate(locationIdSchema),
+  locations.getLocationById,
+);
+
+locationsRouter.post(
+  "/locations",
   authenticate,
   celebrate(createLocationSchema),
-  createLocation,
+  locations.createLocation,
 );
-router.patch(
-  "/api/locations/:locationId",
+locationsRouter.patch(
+  "/locations/:locationId",
   authenticate,
   celebrate(updateLocationSchema),
-  updateLocation,
+  locations.updateLocation,
 );
 
 export default locationsRouter;

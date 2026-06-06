@@ -47,4 +47,4 @@ locationSchema.index({ region: 1, type: 1 });
 locationSchema.index({ name: "text" });
 locationSchema.index({ userId: 1 });
 
-export const LocationModel = model("Location", locationShema);
+export const LocationModel = model("Location", locationSchema);

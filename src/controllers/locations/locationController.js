@@ -1,5 +1,5 @@
 import createHttpError from "http-errors";
-import { locationSchema } from "../../models/location.js";
+import { LocationModel } from "../../models/location.js";
 import { saveLocationImageToCloudinary } from "../../utils/saveFileToCloudinary.js";
 
 export const getLocations = async (req, res) => {
