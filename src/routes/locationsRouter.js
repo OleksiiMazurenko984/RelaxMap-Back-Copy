@@ -8,6 +8,7 @@ import {
   locationIdSchema,
   updateLocationSchema,
 } from "../validations/locationValidation.js";
+import { uploadLocationImage } from "../middleware/multer.js";
 
 const locationsRouter = Router();
 
@@ -26,12 +27,14 @@ locationsRouter.get(
 locationsRouter.post(
   "/locations",
   authenticate,
+  uploadLocationImage.single("image"),
   celebrate(createLocationSchema),
   locations.createLocation,
 );
 locationsRouter.patch(
   "/locations/:locationId",
   authenticate,
+  uploadLocationImage.single("image"),
   celebrate(updateLocationSchema),
   locations.updateLocation,
 );
