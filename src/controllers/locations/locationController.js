@@ -82,18 +82,17 @@ export const updateLocation = async (req, res) => {
     throw createHttpError(404, "Location not found");
   }
 
+  const updateData = { ...req.body };
+
   if (file) {
     const result = await saveLocationImageToCloudinary(
       file.buffer,
       location._id,
     );
-    image = result.secure_url;
+    updateData.image = result.secure_url;
   }
 
-  location.set({
-    ...req.body,
-    image,
-  });
+  location.set(updateData);
 
   await location.save();
 
