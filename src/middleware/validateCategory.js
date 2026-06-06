@@ -6,8 +6,8 @@ export const validateCategory = async (req, res, next) => {
   const { region, locationType } = req.body;
 
   const [regionExists, locationTypeExists] = await Promise.all([
-    RegionModel.exists({ region }),
-    LocationTypeModel.exists({ locationType }),
+    RegionModel.exists({ slug: region }),
+    LocationTypeModel.exists({ slug: locationType }),
   ]);
 
   if (!regionExists) {

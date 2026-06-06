@@ -43,7 +43,7 @@ const locationSchema = new Schema(
   },
 );
 
-locationSchema.index({ region: 1, type: 1 });
+locationSchema.index({ region: 1, locationType: 1 });
 locationSchema.index({ name: "text" });
 locationSchema.index({ userId: 1 });
 
