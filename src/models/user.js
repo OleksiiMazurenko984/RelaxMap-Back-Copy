@@ -7,6 +7,8 @@ const userSchema = new Schema(
       required: true,
       trim: true,
     },
+    email: { type: String, unique: true, required: true, trim: true },
+    password: { type: String, required: true, minlength: 8 },
     avatarUrl: {
       type: String,
       default: "",
@@ -23,4 +25,16 @@ const userSchema = new Schema(
   },
 );
 
-export const UserModel = model("User", userShema);
+userSchema.methods.toJSON = function () {
+  const obj = this.toObject();
+  delete obj.password;
+  return obj;
+};
+
+userSchema.pre("save", async function () {
+  if (!this.name) {
+    this.name = this.email;
+  }
+});
+
+export const User = model("user", userSchema);

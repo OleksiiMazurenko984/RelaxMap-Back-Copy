@@ -1,7 +1,8 @@
-import {} from "./auth/authController";
-import {} from "./categories/categoriesController";
-import {} from "./feedback/feedbackController";
-import {} from "./locations/locationController";
+// import {} from "./auth/authController.js";
+// import {} from "./categories/categoriesController.js";
+import { getRegions } from "./regions/regions.js";
+// import {} from "./feedback/feedbackController.js";
+import { getLocationTypes } from "./locations/locations.js";
 import {
   getCurrentUser,
   getUserById,
@@ -9,7 +10,7 @@ import {
 } from "./users/userController.js";
 
 export const auth = {};
-export const categories = {};
+export const categories = { getRegions, getLocationTypes };
 export const feedbacks = {};
 export const locations = {};
 export const users = { getCurrentUser, getUserById, getUserLocations };
