@@ -3,7 +3,7 @@ import { LocationModel } from "../../models/location.js";
 import { saveLocationImageToCloudinary } from "../../utils/saveFileToCloudinary.js";
 
 export const getLocations = async (req, res) => {
-  const { page = 1, limit = 10, region, type, search } = req.query;
+  const { page = 1, limit = 10, region, locationType, search } = req.query;
   const skip = (page - 1) * limit;
 
   const filter = {};
@@ -12,8 +12,8 @@ export const getLocations = async (req, res) => {
     filter.region = region;
   }
 
-  if (type) {
-    filter.type = type;
+  if (locationType) {
+    filter.locationType = locationType;
   }
 
   if (search) {

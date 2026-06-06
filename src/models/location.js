@@ -9,7 +9,7 @@ const locationSchema = new Schema(
       maxlength: 96,
       trim: true,
     },
-    type: {
+    locationType: {
       type: String,
       required: true,
       maxlength: 64,
