@@ -20,10 +20,10 @@ export const getLocations = async (req, res) => {
     filter.$text = { $search: search };
   }
 
-  const locationsQuery = Location.find(filter).sort({ createdAt: -1 });
+  const locationsQuery = LocationModel.find(filter).sort({ createdAt: -1 });
 
   const [totalLocations, locations] = await Promise.all([
-    Location.countDocuments(filter),
+    LocationModel.countDocuments(filter),
     locationsQuery.skip(skip).limit(limit),
   ]);
 
@@ -41,7 +41,7 @@ export const getLocations = async (req, res) => {
 export const getLocationById = async (req, res) => {
   const { locationId } = req.params;
 
-  const location = await Location.findById(locationId);
+  const location = await LocationModel.findById(locationId);
 
   if (!location) {
     throw createHttpError(404, "Location not found");
@@ -57,7 +57,7 @@ export const createLocation = async (req, res) => {
     throw createHttpError(400, "Location image is required");
   }
 
-  const location = new Location({
+  const location = new LocationModel({
     ...req.body,
     userId: user._id,
   });
@@ -73,7 +73,7 @@ export const updateLocation = async (req, res) => {
   const { locationId } = req.params;
   const { file, user } = req;
 
-  const location = await Location.findOne({
+  const location = await LocationModel.findOne({
     _id: locationId,
     userId: user._id,
   });
