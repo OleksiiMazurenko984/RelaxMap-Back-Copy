@@ -9,6 +9,7 @@ import {
   updateLocationSchema,
 } from "../validations/locationValidation.js";
 import { uploadLocationImage } from "../middleware/multer.js";
+import { validateCategory } from "../middleware/validateCategory.js";
 
 const locationsRouter = Router();
 
@@ -29,6 +30,7 @@ locationsRouter.post(
   authenticate,
   uploadLocationImage.single("image"),
   celebrate(createLocationSchema),
+  validateCategory,
   locations.createLocation,
 );
 locationsRouter.patch(
@@ -36,6 +38,7 @@ locationsRouter.patch(
   authenticate,
   uploadLocationImage.single("image"),
   celebrate(updateLocationSchema),
+  validateCategory,
   locations.updateLocation,
 );
 
