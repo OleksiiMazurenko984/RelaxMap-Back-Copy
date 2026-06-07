@@ -6,11 +6,12 @@ import { getLocationTypes } from "./locations/locations.js";
 import {
   getCurrentUser,
   getUserById,
-  getUserLocations,
+  // getUserLocations,
 } from "./users/userController.js";
 
 export const auth = {};
 export const categories = { getRegions, getLocationTypes };
 export const feedbacks = {};
 export const locations = {};
-export const users = { getCurrentUser, getUserById, getUserLocations };
+export const users = { getCurrentUser, getUserById };
+// export const users = { getCurrentUser, getUserById, getUserLocations };

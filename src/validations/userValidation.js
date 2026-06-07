@@ -11,13 +11,13 @@ export const userIdSchema = {
   }),
 };
 
-export const userLocationsSchema = {
-  [Segments.PARAMS]: Joi.object({
-    userId: Joi.string().custom(objectIdValidator).required(),
-  }),
+// export const userLocationsSchema = {
+//   [Segments.PARAMS]: Joi.object({
+//     userId: Joi.string().custom(objectIdValidator).required(),
+//   }),
 
-  [Segments.QUERY]: Joi.object({
-    page: Joi.number().integer().min(1).default(1),
-    perPage: Joi.number().integer().min(1).max(6).default(6),
-  }),
-};
+//   [Segments.QUERY]: Joi.object({
+//     page: Joi.number().integer().min(1).default(1),
+//     perPage: Joi.number().integer().min(1).max(6).default(6),
+//   }),
+// };
