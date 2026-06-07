@@ -4,6 +4,13 @@ import {
   locationIdSchema,
   updateLocationSchema,
 } from "./locationValidation.js";
+import {loginUserSchema, registerUserSchema} from "./authValidation.js";
+
+
+export const authValidation = {
+  registerUserSchema,
+  loginUserSchema,
+};
 
 export const locations = {
   createLocationSchema,
