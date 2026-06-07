@@ -1,10 +1,9 @@
-import { feedbackService } from "../../services/feedback/feedbackService.js";
+import { feedbacks } from "../../services/index.js";
 
 export const createFeedback = async (req, res, next) => {
   try {
     const { locationId, rate, description, userName } = req.body;
-
-    const feedback = await feedbackService.createFeedback({
+    const feedback = await feedbacks.createFeedback({
       locationId,
       rate,
       description,
@@ -20,7 +19,7 @@ export const createFeedback = async (req, res, next) => {
 export const getFeedbacks = async (req, res, next) => {
   try {
     const { locationId, page, perPage } = req.query;
-    const data = await feedbackService.getFeedbacksByLocation({
+    const data = await feedbacks.getFeedbacksByLocation({
       locationId,
       page,
       perPage,

@@ -27,4 +27,4 @@ const feedbackSchema = new Schema(
 
 feedbackSchema.index({ createdAt: -1 });
 
-export const FeedbackModel = model("feedback", feedbackSchema);
+export const FeedbackModel = model("Feedback", feedbackSchema);

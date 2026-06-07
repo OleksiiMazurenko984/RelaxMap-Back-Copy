@@ -1,6 +1,5 @@
 import createHttpError from "http-errors";
-import { FeedbackModel } from "../../models/feedback.js";
-import { LocationModel } from "../../models/location.js";
+import { FeedbackModel, LocationModel } from "../../models/index.js";
 
 export const feedbackService = {
   async createFeedback({ locationId, rate, description, userName }) {
