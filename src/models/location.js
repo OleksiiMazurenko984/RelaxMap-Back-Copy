@@ -32,7 +32,7 @@ const locationSchema = new Schema(
       type: String,
       required: true,
     },
-    userId: {
+    ownerId: {
       type: Schema.Types.ObjectId,
       ref: "User",
       required: true,
@@ -45,6 +45,6 @@ const locationSchema = new Schema(
 
 locationSchema.index({ region: 1, locationType: 1 });
 locationSchema.index({ name: "text" });
-locationSchema.index({ userId: 1 });
+locationSchema.index({ ownerId: 1 });
 
 export const LocationModel = model("Location", locationSchema);

@@ -59,7 +59,7 @@ export const createLocation = async (req, res) => {
 
   const location = new LocationModel({
     ...req.body,
-    userId: user._id,
+    ownerId: user._id,
   });
   const result = await saveLocationImageToCloudinary(file.buffer, location._id);
 
@@ -75,7 +75,7 @@ export const updateLocation = async (req, res) => {
 
   const location = await LocationModel.findOne({
     _id: locationId,
-    userId: user._id,
+    ownerId: user._id,
   });
 
   if (!location) {
