@@ -10,12 +10,22 @@ export const validateCategory = async (req, res, next) => {
     LocationTypeModel.exists({ slug: locationType }),
   ]);
 
-  if (!regionExists) {
-    throw createHttpError(400, "Region does not exist");
+  if (region) {
+    const regionExists = await RegionModel.exists({ slug: region });
+
+    if (!regionExists) {
+      throw createHttpError(400, "Region does not exist");
+    }
   }
 
-  if (!locationTypeExists) {
-    throw createHttpError(400, "Location type does not exist");
+  if (locationType) {
+    const locationTypeExists = await LocationTypeModel.exists({
+      slug: locationType,
+    });
+
+    if (!locationTypeExists) {
+      throw createHttpError(400, "Location type does not exist");
+    }
   }
 
   next();
