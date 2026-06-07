@@ -21,32 +21,32 @@ export const getUserById = async (req, res) => {
   res.status(200).json(user);
 };
 
-// export const getUserLocations = async (req, res) => {
-//   const { userId } = req.params;
-//   const { page = 1, perPage = 6 } = req.query;
+export const getUserLocations = async (req, res) => {
+  const { userId } = req.params;
+  const { page = 1, perPage = 6 } = req.query;
 
-//   const user = await User.findById(userId);
+  const user = await User.findById(userId);
 
-//   if (!user) {
-//     throw createHttpError(404, "User not found");
-//   }
+  if (!user) {
+    throw createHttpError(404, "User not found");
+  }
 
-//   const skip = (page - 1) * perPage;
+  const skip = (page - 1) * perPage;
 
-//   const locationsQuery = LocationModel.find({ ownerId: userId });
+  const locationsQuery = LocationModel.find({ ownerId: userId });
 
-//   const [totalLocations, locations] = await Promise.all([
-//     locationsQuery.clone().countDocuments(),
-//     locationsQuery.skip(skip).limit(Number(perPage)),
-//   ]);
+  const [totalLocations, locations] = await Promise.all([
+    locationsQuery.clone().countDocuments(),
+    locationsQuery.skip(skip).limit(Number(perPage)),
+  ]);
 
-//   const totalPages = Math.ceil(totalLocations / perPage);
+  const totalPages = Math.ceil(totalLocations / perPage);
 
-//   res.status(200).json({
-//     page: Number(page),
-//     perPage: Number(perPage),
-//     totalLocations,
-//     totalPages,
-//     locations,
-//   });
-// };
+  res.status(200).json({
+    page: Number(page),
+    perPage: Number(perPage),
+    totalLocations,
+    totalPages,
+    locations,
+  });
+};

@@ -47,3 +47,9 @@ export const setSessionCookies = (res, session) => {
         maxAge: ONE_DAY,
     });
 };
+
+export const authService = {
+    createSession,
+    removeSession,
+    setSessionCookies,
+};

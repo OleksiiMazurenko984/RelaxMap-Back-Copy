@@ -14,10 +14,10 @@ usersRouter.get(
   users.getUserById,
 );
 
-// usersRouter.get(
-//   "/:userId/locations",
-//   celebrate(userValidation.userLocationsSchema),
-//   users.getUserLocations,
-// );
+usersRouter.get(
+  "/:userId/locations",
+  celebrate(userValidation.userLocationsSchema),
+  users.getUserLocations,
+);
 
 export default usersRouter;
