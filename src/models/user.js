@@ -11,7 +11,7 @@ const userSchema = new Schema(
     password: { type: String, required: true, minlength: 8 },
     avatarUrl: {
       type: String,
-      default: "../public/images/default-avatar.jpg",
+      default: "/public/images/default-avatar.jpg",
     },
     articlesAmount: {
       type: Number,
