@@ -1,25 +1,25 @@
 import { authService } from "./auth/authService.js";
 import { categoriesService } from "./categories/categoriesService.js";
-import { feedbackService } from "./feedback/feedbackService.js";
+import { feedbackService } from "./feedbacks/feedbackService.js";
 import { locationService } from "./locations/locationService.js";
 import { userService } from "./users/userService.js";
 
 export const auth = {
-  ...authService
+  ...authService,
 };
 
 export const categories = {
-  ...categoriesService
+  ...categoriesService,
 };
 
 export const feedbacks = {
-  ...feedbackService
+  ...feedbackService,
 };
 
 export const locations = {
-  ...locationService
+  ...locationService,
 };
 
 export const users = {
-  ...userService
+  ...userService,
 };

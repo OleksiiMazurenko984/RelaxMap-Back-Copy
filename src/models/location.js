@@ -37,6 +37,12 @@ const locationSchema = new Schema(
       ref: "User",
       required: true,
     },
+    feedbacksId: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Feedback",
+      },
+    ],
   },
   {
     timestamps: true,
