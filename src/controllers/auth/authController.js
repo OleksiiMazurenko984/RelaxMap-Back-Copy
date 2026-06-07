@@ -3,6 +3,7 @@ import createHttpError from 'http-errors';
 import { User } from '../../models/user.js';
 import { createSession, setSessionCookies, removeSession } from '../../services/auth/authService.js';
 import { Session } from "../../models/session.js";
+import {auth} from "../../services/index.js";
 
 export const registerUser = async (req, res) => {
     const { name, email, password } = req.body;
@@ -15,8 +16,8 @@ export const registerUser = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
     const user = await User.create({ name, email, password: hashedPassword });
 
-    const session = await createSession(user._id);
-    setSessionCookies(res, session);
+    const session = await auth.createSession(user._id);
+    auth.setSessionCookies(res, session);
 
     res.status(201).json({
         user: { id: user._id, name: user.name, email: user.email }
@@ -36,8 +37,8 @@ export const loginUser = async (req, res) => {
         throw createHttpError(401, 'Invalid credentials');
     }
 
-    const session = await createSession(user._id);
-    setSessionCookies(res, session);
+    const session = await auth.createSession(user._id);
+    auth.setSessionCookies(res, session);
 
     res.status(200).json({
         user: { id: user._id, name: user.name, email: user.email }
@@ -64,8 +65,8 @@ export const refreshUserSession = async (req, res) => {
         throw createHttpError(401, 'Refresh token expired. Please login again.');
     }
 
-    const newSession = await createSession(session.userId, sessionId);
-    setSessionCookies(res, newSession);
+    const newSession = await auth.createSession(session.userId, sessionId);
+    auth.setSessionCookies(res, newSession);
 
     res.status(200).json({ message: 'Session refreshed successfully' });
 };
@@ -74,7 +75,7 @@ export const logoutUser = async (req, res) => {
     const { sessionId } = req.cookies;
 
     if (sessionId) {
-        await removeSession(sessionId);
+        await auth.removeSession(sessionId);
     }
 
     res.clearCookie('sessionId');
