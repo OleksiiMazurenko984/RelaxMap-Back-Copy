@@ -10,7 +10,6 @@ export const createFeedbackSchema = {
     locationId: Joi.string().custom(objectIdValidator).required(),
     rate: Joi.number().min(1).max(5).required(),
     description: Joi.string().min(1).max(200).required(),
-    userName: Joi.string().min(2).max(32).required(),
   }),
 };
 
