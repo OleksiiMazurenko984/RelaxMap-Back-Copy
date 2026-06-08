@@ -21,6 +21,12 @@ const locationSchema = new Schema(
       maxlength: 64,
       trim: true,
     },
+    rate: {
+      type: Number,
+      min: 0,
+      max: 5,
+      default: 0,
+    },
     description: {
       type: String,
       required: true,

@@ -37,8 +37,34 @@ export const getUserLocations = async (req, res) => {
 
   const [totalLocations, locations] = await Promise.all([
     locationsQuery.clone().countDocuments(),
-    locationsQuery.skip(skip).limit(Number(perPage)),
+    locationsQuery
+      .skip(skip)
+      .limit(Number(perPage))
+      .populate("feedbacksId", "rate"),
   ]);
+
+  const locationsWithAverageRate = locations.map((location) => {
+    const locationObject = location.toObject();
+
+    const feedbacks = locationObject.feedbacksId || [];
+
+    let totalRate = 0;
+    let ratesCount = 0;
+
+    for (const feedback of feedbacks) {
+      if (feedback && typeof feedback.rate === "number") {
+        totalRate += feedback.rate;
+        ratesCount += 1;
+      }
+    }
+
+    const averageRate = ratesCount ? totalRate / ratesCount : 0;
+
+    return {
+      ...locationObject,
+      rate: Number(averageRate.toFixed(1)),
+    };
+  });
 
   const totalPages = Math.ceil(totalLocations / perPage);
 

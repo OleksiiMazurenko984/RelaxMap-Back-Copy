@@ -24,8 +24,36 @@ export const getLocations = async (req, res) => {
 
   const [totalLocations, locations] = await Promise.all([
     LocationModel.countDocuments(filter),
-    locationsQuery.skip(skip).limit(limit),
+    locationsQuery
+      .skip(skip)
+      .limit(Number(limit))
+      .populate("feedbacksId", "rate"),
   ]);
+
+  const locationsWithAverageRate = locations.map((location) => {
+    const locationObject = location.toObject();
+
+    const feedbacks = locationObject.feedbacksId || [];
+
+    let totalRate = 0;
+    let ratesCount = 0;
+
+    for (const feedback of feedbacks) {
+      if (feedback && typeof feedback.rate === "number") {
+        totalRate += feedback.rate;
+        ratesCount += 1;
+      }
+    }
+
+    const averageRate = ratesCount
+      ? totalRate / ratesCount
+      : locationObject.rate || 0;
+
+    return {
+      ...locationObject,
+      rate: Number(averageRate.toFixed(1)),
+    };
+  });
 
   const totalPages = Math.ceil(totalLocations / limit);
 
@@ -34,7 +62,7 @@ export const getLocations = async (req, res) => {
     limit,
     totalLocations,
     totalPages,
-    locations,
+    locations: locationsWithAverageRate,
   });
 };
 
