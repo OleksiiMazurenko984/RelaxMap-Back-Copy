@@ -5,6 +5,7 @@ import {
   updateLocationSchema,
 } from "./locationValidation.js";
 import { loginUserSchema, registerUserSchema } from "./authValidation.js";
+import { userIdSchema, userLocationsSchema } from "./userValidation.js";
 
 export const authValidation = {
   registerUserSchema,
@@ -21,3 +22,5 @@ export {
   createFeedbackSchema,
   getFeedbacksSchema,
 } from "./feedbackValidation.js";
+
+export const userValidation = { userIdSchema, userLocationsSchema };

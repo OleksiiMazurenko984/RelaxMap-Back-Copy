@@ -18,7 +18,11 @@ import {
   refreshUserSession,
   registerUser,
 } from "./auth/authController.js";
-// import {} from "./users/userController.js";
+import {
+  getCurrentUser,
+  getUserById,
+  getUserLocations,
+} from "./users/userController.js";
 
 export const auth = { registerUser, loginUser, refreshUserSession, logoutUser };
 export const categories = { getRegions, getLocationTypes };
@@ -29,4 +33,4 @@ export const locations = {
   createLocation,
   updateLocation,
 };
-export const users = {};
+export const users = { getCurrentUser, getUserById, getUserLocations };
