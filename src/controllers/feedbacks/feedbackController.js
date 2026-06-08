@@ -2,12 +2,12 @@ import { feedbacks } from "../../services/index.js";
 
 export const createFeedback = async (req, res, next) => {
   try {
-    const { locationId, rate, description, userName } = req.body;
+    const { locationId, rate, description } = req.body;
     const feedback = await feedbacks.createFeedback({
       locationId,
       rate,
       description,
-      userName,
+      userName: req.user.name,
     });
 
     res.status(201).json(feedback);
