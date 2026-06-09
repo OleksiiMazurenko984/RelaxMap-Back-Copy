@@ -8,10 +8,7 @@ const getLocationTimestamp = (location) => {
   return Number.isNaN(time) ? 0 : time;
 };
 
-const getLocationPopularityData = (location) => {
-  const locationObject = location.toObject();
-  const feedbacks = locationObject.feedbacksId || [];
-
+const calculateAverageRate = (feedbacks, fallbackRate = 0) => {
   let totalRate = 0;
   let ratesCount = 0;
 
@@ -22,19 +19,41 @@ const getLocationPopularityData = (location) => {
     }
   }
 
-  const averageRate = ratesCount
-    ? totalRate / ratesCount
-    : locationObject.rate || 0;
-  const roundedRate = Number(averageRate.toFixed(1));
-  const feedbacksCount = feedbacks.length;
+  const averageRate = ratesCount ? totalRate / ratesCount : fallbackRate;
+
+  return Number(averageRate.toFixed(1));
+};
+
+const getFeedbackId = (feedback) => feedback?._id || feedback;
+
+const getLocationWithAverageRate = (
+  location,
+  fallbackToStoredRate = true,
+  keepFeedbackIdsOnly = false,
+) => {
+  const locationObject = location.toObject();
+  const feedbacks = locationObject.feedbacksId || [];
+  const fallbackRate = fallbackToStoredRate ? locationObject.rate || 0 : 0;
+  const locationWithAverageRate = {
+    ...locationObject,
+    rate: calculateAverageRate(feedbacks, fallbackRate),
+  };
+
+  if (keepFeedbackIdsOnly) {
+    locationWithAverageRate.feedbacksId = feedbacks.map(getFeedbackId);
+  }
+
+  return locationWithAverageRate;
+};
+
+const getLocationPopularityData = (location) => {
+  const locationWithAverageRate = getLocationWithAverageRate(location);
+  const feedbacksCount = locationWithAverageRate.feedbacksId?.length || 0;
 
   return {
-    location: {
-      ...locationObject,
-      rate: roundedRate,
-    },
+    location: locationWithAverageRate,
     feedbacksCount,
-    popularityScore: feedbacksCount * roundedRate,
+    popularityScore: feedbacksCount * locationWithAverageRate.rate,
   };
 };
 
@@ -111,13 +130,16 @@ export const getLocations = async (req, res) => {
 export const getLocationById = async (req, res) => {
   const { locationId } = req.params;
 
-  const location = await LocationModel.findById(locationId);
+  const location = await LocationModel.findById(locationId).populate(
+    "feedbacksId",
+    "rate",
+  );
 
   if (!location) {
     throw createHttpError(404, "Location not found");
   }
 
-  res.status(200).json(location);
+  res.status(200).json(getLocationWithAverageRate(location, false, true));
 };
 
 export const createLocation = async (req, res) => {
