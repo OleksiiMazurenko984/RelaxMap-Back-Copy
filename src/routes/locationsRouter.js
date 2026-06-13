@@ -9,19 +9,19 @@ import { validateCategory } from "../middleware/validateCategory.js";
 const locationsRouter = Router();
 
 locationsRouter.get(
-  "/locations",
+  "/",
   celebrate(locationsValidation.getAllLocationsSchema),
   locations.getLocations,
 );
 
 locationsRouter.get(
-  "/locations/:locationId",
+  "/:locationId",
   celebrate(locationsValidation.locationIdSchema),
   locations.getLocationById,
 );
 
 locationsRouter.post(
-  "/locations",
+  "/",
   authenticate,
   uploadLocationImage.single("image"),
   celebrate(locationsValidation.createLocationSchema),
@@ -29,7 +29,7 @@ locationsRouter.post(
   locations.createLocation,
 );
 locationsRouter.patch(
-  "/locations/:locationId",
+  "/:locationId",
   authenticate,
   uploadLocationImage.single("image"),
   celebrate(locationsValidation.updateLocationSchema),

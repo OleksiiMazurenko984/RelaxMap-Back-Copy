@@ -73,6 +73,6 @@ export const getUserLocations = async (req, res) => {
     perPage: Number(perPage),
     totalLocations,
     totalPages,
-    locations,
+    locations: locationsWithAverageRate,
   });
 };

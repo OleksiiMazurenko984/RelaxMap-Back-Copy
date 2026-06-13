@@ -21,7 +21,7 @@ const calculateAverageRate = (feedbacks, fallbackRate = 0) => {
 
   const averageRate = ratesCount ? totalRate / ratesCount : fallbackRate;
 
-  return Number(averageRate.toFixed(1));
+  return Math.round(averageRate * 2) / 2;
 };
 
 const getFeedbackId = (feedback) => feedback?._id || feedback;
@@ -90,7 +90,14 @@ const getLocationsSortedByPopularity = (locations) =>
     .map(({ location }) => location);
 
 export const getLocations = async (req, res) => {
-  const { page = 1, limit = 10, region, locationType, search } = req.query;
+  const {
+    page = 1,
+    limit = 10,
+    region,
+    locationType,
+    search,
+    sort,
+  } = req.query;
   const skip = (page - 1) * limit;
 
   const filter = {};
@@ -100,11 +107,20 @@ export const getLocations = async (req, res) => {
   }
 
   if (locationType) {
-    filter.locationType = locationType;
+    const locationTypes = locationType
+      .split(",")
+      .map((type) => type.trim())
+      .filter(Boolean);
+
+    if (locationTypes.length > 0) {
+      filter.locationType = {
+        $in: locationTypes,
+      };
+    }
   }
 
   if (search) {
-    filter.$text = { $search: search };
+    filter.name = { $regex: search, $options: "i" };
   }
 
   const [totalLocations, locations] = await Promise.all([
@@ -112,9 +128,24 @@ export const getLocations = async (req, res) => {
     LocationModel.find(filter).populate("feedbacksId", "rate"),
   ]);
 
-  const locationsWithAverageRate = getLocationsSortedByPopularity(
-    locations,
-  ).slice(skip, skip + Number(limit));
+  let sortedLocations;
+
+  if (sort === "rating") {
+    sortedLocations = locations
+      .map((location) => getLocationWithAverageRate(location))
+      .sort((a, b) => b.rate - a.rate);
+  } else if (sort === "newest") {
+    sortedLocations = locations
+      .map((location) => getLocationWithAverageRate(location))
+      .sort((a, b) => getLocationTimestamp(b) - getLocationTimestamp(a));
+  } else {
+    sortedLocations = getLocationsSortedByPopularity(locations);
+  }
+
+  const locationsWithAverageRate = sortedLocations.slice(
+    skip,
+    skip + Number(limit),
+  );
 
   const totalPages = Math.ceil(totalLocations / limit);
 
@@ -130,16 +161,14 @@ export const getLocations = async (req, res) => {
 export const getLocationById = async (req, res) => {
   const { locationId } = req.params;
 
-  const location = await LocationModel.findById(locationId).populate(
-    "feedbacksId",
-    "rate",
-  );
+  const location =
+    await LocationModel.findById(locationId).populate("feedbacksId");
 
   if (!location) {
     throw createHttpError(404, "Location not found");
   }
 
-  res.status(200).json(getLocationWithAverageRate(location, false, true));
+  res.status(200).json(getLocationWithAverageRate(location, false));
 };
 
 export const createLocation = async (req, res) => {

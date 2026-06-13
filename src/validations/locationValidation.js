@@ -12,6 +12,7 @@ export const getAllLocationsSchema = {
     region: Joi.string().max(64),
     locationType: Joi.string().max(64),
     search: Joi.string().allow("").max(96),
+    sort: Joi.string().valid("rating", "newest").allow(""),
   }),
 };
 
