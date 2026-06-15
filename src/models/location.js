@@ -52,8 +52,24 @@ const locationSchema = new Schema(
   },
   {
     timestamps: true,
+    toObject: { virtuals: true },
+    toJSON: { virtuals: true },
   },
 );
+
+locationSchema.virtual("regionInfo", {
+  ref: "Region",
+  localField: "region",
+  foreignField: "slug",
+  justOne: true,
+});
+
+locationSchema.virtual("locationTypeInfo", {
+  ref: "LocationType",
+  localField: "locationType",
+  foreignField: "slug",
+  justOne: true,
+});
 
 locationSchema.index({ region: 1, locationType: 1 });
 locationSchema.index({ name: "text" });
