@@ -1,5 +1,6 @@
 import { LocationModel } from "../../models/location.js";
 import { User } from "../../models/user.js";
+import { saveUserAvatarToCloudinary } from "../../utils/saveFileToCloudinary.js";
 import createHttpError from "http-errors";
 
 export const getCurrentUser = async (req, res) => {
@@ -75,4 +76,27 @@ export const getUserLocations = async (req, res) => {
     totalPages,
     locations: locationsWithAverageRate,
   });
+};
+
+export const updateCurrentUser = async (req, res) => {
+  const { file, user } = req;
+  const updateData = {};
+
+  if (req.body.name) {
+    updateData.name = req.body.name;
+  }
+
+  if (file) {
+    const result = await saveUserAvatarToCloudinary(file.buffer, user._id);
+    updateData.avatarUrl = result.secure_url;
+  }
+
+  if (Object.keys(updateData).length === 0) {
+    throw createHttpError(400, "Name or avatar is required");
+  }
+
+  user.set(updateData);
+  await user.save();
+
+  res.status(200).json(user);
 };

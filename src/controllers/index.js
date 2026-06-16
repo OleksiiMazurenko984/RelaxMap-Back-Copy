@@ -22,6 +22,7 @@ import {
   getCurrentUser,
   getUserById,
   getUserLocations,
+  updateCurrentUser,
 } from "./users/userController.js";
 
 export const auth = { registerUser, loginUser, refreshUserSession, logoutUser };
@@ -33,4 +34,9 @@ export const locations = {
   createLocation,
   updateLocation,
 };
-export const users = { getCurrentUser, getUserById, getUserLocations };
+export const users = {
+  getCurrentUser,
+  getUserById,
+  getUserLocations,
+  updateCurrentUser,
+};

@@ -21,3 +21,9 @@ export const userLocationsSchema = {
     perPage: Joi.number().integer().min(1).max(6).default(6),
   }),
 };
+
+export const userUpdateSchema = {
+  [Segments.BODY]: Joi.object({
+    name: Joi.string().min(2).max(32),
+  }),
+};
